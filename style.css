@@ -1,8 +1,8 @@
 body {
-  font-family: sans-serif;
-  background-color: #f5f5f5;
-  margin: 0;
-  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 20px;
+  padding: 0;
 }
 
 h1 {
@@ -13,57 +13,56 @@ h1 {
 #semestres-container {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  gap: 25px;
   overflow-x: auto;
-  gap: 30px;
+  padding-bottom: 20px;
 }
 
 .semestre {
-  flex: 0 0 auto;
+  min-width: 160px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  padding: 10px 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 160px;
 }
 
 .semestre h2 {
-  margin-bottom: 10px;
+  margin: 10px 0;
   font-size: 18px;
-  color: #333;
+  color: #444;
 }
 
 .ramo {
   width: 140px;
-  background-color: #ffffff;
-  border: 2px solid #888;
+  margin: 6px 0;
+  padding: 8px;
   border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
-  text-align: center;
+  border: 2px solid #999;
   cursor: pointer;
-  position: relative;
-  transition: background-color 0.3s;
-}
-
-.ramo.aprobado {
-  background-color: #f8d7da; /* rojo claro */
-  border-color: #d9534f;
-}
-
-.ramo.abierto {
-  background-color: #cce5ff; /* azul */
-  border-color: #337ab7;
+  text-align: center;
+  user-select: none;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .ramo.bloqueado {
-  background-color: #e2e3e5; /* gris */
+  background-color: #e2e3e5;
   border-color: #adb5bd;
+  color: #666;
   cursor: not-allowed;
 }
 
-.linea {
-  position: absolute;
-  width: 2px;
-  background-color: #000;
-  z-index: 0;
+.ramo.abierto {
+  background-color: #cce5ff;
+  border-color: #339af0;
+  color: #084298;
+}
+
+.ramo.aprobado {
+  background-color: #f8d7da;
+  border-color: #d6336c;
+  color: #842029;
+  text-decoration: line-through;
 }
