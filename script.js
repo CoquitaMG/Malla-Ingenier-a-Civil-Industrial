@@ -118,4 +118,97 @@ const ramosPorSemestre = [
       { nombre: "Gestión de la Cadena de Suministros", id: "gest_cadena2", prer: ["gest_cadena"] },
       { nombre: "Project Management", id: "proj_man", prer: ["dir_estrat", "form_eval"] },
       { nombre: "Electivo Profesional 1", id: "electivo1_2", prer: ["electivo1"] },
-      { nombre: "Finanzas", id: "fin
+      { nombre: "Finanzas", id: "finanzas", prer: ["ing_econ"] },
+      { nombre: "Taller de Comunicación Efectiva", id: "taller_com2", prer: ["taller_com"] }
+    ]
+  },
+  {
+    semestre: "11° Semestre",
+    ramos: [
+      { nombre: "Proyecto de Título", id: "proy_tit", prer: ["proj_man", "gest_ries", "gest_cadena2", "electivo1_2", "finanzas", "taller_com2"] },
+      { nombre: "Práctica Profesional", id: "pract_prof", prer: ["pract_bas"] },
+      { nombre: "Electivo Profesional 2", id: "electivo2_2", prer: ["electivo2"] }
+    ]
+  }
+];
+
+// Guardamos el estado de aprobados en localStorage
+const storageKey = "mallaEstadoRamos";
+
+// Cargamos estado guardado o creamos uno nuevo
+let estadoRamos = JSON.parse(localStorage.getItem(storageKey)) || {};
+
+// Crear container
+const container = document.getElementById("semestres-container");
+
+// Función para saber si un ramo está desbloqueado (si sus prerrequisitos están aprobados)
+function estaAbierto(ramo) {
+  return ramo.prer.every(prerId => estadoRamos[prerId] === true);
+}
+
+// Función para actualizar visuales
+function actualizarVisuales() {
+  // Actualiza cada ramo según su estado
+  document.querySelectorAll(".ramo").forEach(el => {
+    const id = el.dataset.id;
+    if (estadoRamos[id]) {
+      el.classList.add("aprobado");
+      el.classList.remove("abierto");
+      el.classList.remove("bloqueado");
+    } else if (estaAbierto(ramosPorId[id])) {
+      el.classList.add("abierto");
+      el.classList.remove("bloqueado");
+      el.classList.remove("aprobado");
+    } else {
+      el.classList.add("bloqueado");
+      el.classList.remove("abierto");
+      el.classList.remove("aprobado");
+    }
+  });
+}
+
+// Creamos un mapa para acceso rápido a ramos por ID
+const ramosPorId = {};
+ramosPorSemestre.forEach(semestre => {
+  semestre.ramos.forEach(ramo => {
+    ramosPorId[ramo.id] = ramo;
+  });
+});
+
+// Función para crear cada ramo HTML
+function crearRamoHTML(ramo) {
+  const div = document.createElement("div");
+  div.classList.add("ramo");
+  div.dataset.id = ramo.id;
+  div.textContent = ramo.nombre;
+  div.addEventListener("click", () => {
+    // Si está bloqueado no se puede marcar
+    if (!estaAbierto(ramo) && !estadoRamos[ramo.id]) return;
+    // Cambiar estado aprobado/no aprobado
+    estadoRamos[ramo.id] = !estadoRamos[ramo.id];
+    localStorage.setItem(storageKey, JSON.stringify(estadoRamos));
+    actualizarVisuales();
+  });
+  return div;
+}
+
+// Renderizar toda la malla
+function renderizarMalla() {
+  container.innerHTML = "";
+  ramosPorSemestre.forEach(semestre => {
+    const divSemestre = document.createElement("div");
+    divSemestre.classList.add("semestre");
+    const h2 = document.createElement("h2");
+    h2.textContent = semestre.semestre;
+    divSemestre.appendChild(h2);
+
+    semestre.ramos.forEach(ramo => {
+      divSemestre.appendChild(crearRamoHTML(ramo));
+    });
+
+    container.appendChild(divSemestre);
+  });
+}
+
+renderizarMalla();
+actualizarVisuales();
