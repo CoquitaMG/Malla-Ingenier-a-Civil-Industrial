@@ -1,99 +1,121 @@
+// Datos completos según tus 11 semestres y ramos con prerrequisitos
+
 const ramosPorSemestre = [
   {
     semestre: "1° Semestre",
     ramos: [
-      { nombre: "Introducción a la Ingeniería Industrial", id: "intro", prer: [] },
-      { nombre: "Álgebra", id: "algebra", prer: [] },
-      { nombre: "Cálculo I", id: "calculo1", prer: [] },
-      { nombre: "Comunicación Oral y Escrita", id: "comunicacion", prer: [] },
-      { nombre: "Historia del Pensamiento Económico", id: "historiaeco", prer: [] }
+      { nombre: "Fundamentos de Matemática", id: "fund_mat", prer: [] },
+      { nombre: "Desarrollo Personal", id: "des_per", prer: [] },
+      { nombre: "Desafíos de Ingeniería", id: "des_ing", prer: [] },
+      { nombre: "Fundamentos de Programación", id: "fund_prog", prer: [] },
+      { nombre: "Química para Ingeniería", id: "quim_ing", prer: [] }
     ]
   },
   {
     semestre: "2° Semestre",
     ramos: [
-      { nombre: "Álgebra Lineal", id: "algebra_lineal", prer: ["algebra"] },
-      { nombre: "Cálculo II", id: "calculo2", prer: ["calculo1"] },
-      { nombre: "Contabilidad y Costos", id: "contabilidad", prer: [] },
-      { nombre: "Introducción a la Programación", id: "programacion", prer: [] },
-      { nombre: "Física I", id: "fisica1", prer: ["calculo1"] }
+      { nombre: "Fundamentos de Física", id: "fund_fis", prer: [] },
+      { nombre: "Cálculo Diferencial", id: "calc_diff", prer: ["fund_mat"] },
+      { nombre: "Álgebra", id: "algebra", prer: ["fund_mat"] },
+      { nombre: "Ingeniería Innovación y Emprendimiento", id: "ingen_emi", prer: ["des_ing"] },
+      { nombre: "Programación", id: "programacion", prer: ["fund_prog"] }
     ]
   },
   {
     semestre: "3° Semestre",
     ramos: [
-      { nombre: "Probabilidades y Estadística", id: "estadistica", prer: ["algebra_lineal", "calculo2"] },
-      { nombre: "Mecánica", id: "mecanica", prer: ["fisica1"] },
-      { nombre: "Programación Aplicada", id: "prog_aplicada", prer: ["programacion"] },
-      { nombre: "Microeconomía", id: "microeconomia", prer: ["historiaeco"] },
-      { nombre: "Gestión Organizacional", id: "gestion_org", prer: ["intro"] }
+      { nombre: "Cálculo Integral y Series", id: "calc_int", prer: ["calc_diff"] },
+      { nombre: "Álgebra Lineal", id: "algebra_lin", prer: ["algebra"] },
+      { nombre: "Física Mecánica", id: "fis_mec", prer: ["fund_fis", "calc_diff"] },
+      { nombre: "Tópicos Formación General Ingeniería Industrial", id: "top_form", prer: ["des_per", "ingen_emi"] },
+      { nombre: "Alfabetización Académica para Ingeniería 1", id: "alf_acad_1", prer: ["des_per"] },
+      { nombre: "TIPE Sello UV 1", id: "tipe_uv1", prer: ["ingen_emi"] },
+      { nombre: "Idioma 1", id: "idioma1", prer: [] }
     ]
   },
   {
     semestre: "4° Semestre",
     ramos: [
-      { nombre: "Inferencia Estadística", id: "inferencia", prer: ["estadistica"] },
-      { nombre: "Electromagnetismo", id: "electro", prer: ["mecanica"] },
-      { nombre: "Economía Aplicada", id: "eco_aplicada", prer: ["microeconomia"] },
-      { nombre: "Gestión de Personas", id: "gestion_personas", prer: ["gestion_org"] },
-      { nombre: "Contabilidad Financiera", id: "conta_financiera", prer: ["contabilidad"] }
+      { nombre: "Cálculo en Varias Variables", id: "calc_var", prer: ["calc_int", "algebra_lin"] },
+      { nombre: "Ecuaciones Diferenciales Ordinarias", id: "ecu_dif", prer: ["calc_int"] },
+      { nombre: "Física Calor y Ondas", id: "fis_calor", prer: ["fis_mec"] },
+      { nombre: "Administración de Empresas y Organizaciones", id: "adm_emp", prer: ["top_form", "alf_acad_1"] },
+      { nombre: "TIPE Sello UV 2", id: "tipe_uv2", prer: ["tipe_uv1"] },
+      { nombre: "Idioma 2", id: "idioma2", prer: ["idioma1"] }
     ]
-  }
-  // Agrega más semestres si quieres que siga con la misma estructura
-];
-
-const container = document.getElementById("semestres-container");
-const estadoRamos = {};
-
-function crearMalla() {
-  ramosPorSemestre.forEach((semestreObj) => {
-    const col = document.createElement("div");
-    col.className = "semestre";
-
-    const titulo = document.createElement("h2");
-    titulo.textContent = semestreObj.semestre;
-    col.appendChild(titulo);
-
-    semestreObj.ramos.forEach((ramo) => {
-      const div = document.createElement("div");
-      div.className = "ramo";
-      div.id = ramo.id;
-      div.textContent = ramo.nombre;
-      div.classList.add(ramo.prer.length ? "bloqueado" : "abierto");
-
-      estadoRamos[ramo.id] = ramo.prer.length ? "bloqueado" : "abierto";
-
-      div.onclick = () => {
-        if (estadoRamos[ramo.id] !== "abierto") return;
-        div.classList.remove("abierto");
-        div.classList.add("aprobado");
-        estadoRamos[ramo.id] = "aprobado";
-
-        actualizarRamos();
-      };
-
-      col.appendChild(div);
-    });
-
-    container.appendChild(col);
-  });
-}
-
-function actualizarRamos() {
-  for (const semestre of ramosPorSemestre) {
-    for (const ramo of semestre.ramos) {
-      if (estadoRamos[ramo.id] !== "bloqueado") continue;
-
-      const puedeAbrirse = ramo.prer.every((id) => estadoRamos[id] === "aprobado");
-      if (puedeAbrirse) {
-        const div = document.getElementById(ramo.id);
-        div.classList.remove("bloqueado");
-        div.classList.add("abierto");
-        estadoRamos[ramo.id] = "abierto";
-      }
-    }
-  }
-}
-
-crearMalla();
-
+  },
+  {
+    semestre: "5° Semestre",
+    ramos: [
+      { nombre: "Física Electromagnetismo", id: "fis_elec", prer: ["fis_calor"] },
+      { nombre: "Estadística y Probabilidades", id: "estad_prob", prer: ["calc_var"] },
+      { nombre: "Análisis Financiero y Contable", id: "anal_fin", prer: ["adm_emp"] },
+      { nombre: "Termodinámica", id: "termo", prer: ["quim_ing", "fis_calor"] },
+      { nombre: "Análisis de Materiales y Diseño de Productos", id: "anal_mat", prer: ["quim_ing"] },
+      { nombre: "Principios de Data Science", id: "princ_data", prer: ["programacion"] },
+      { nombre: "Idioma 3", id: "idioma3", prer: ["idioma2"] },
+      { nombre: "Práctica Básica", id: "pract_bas", prer: ["calc_var", "ecu_dif", "fis_calor", "adm_emp", "tipe_uv2", "idioma2"] }
+    ]
+  },
+  {
+    semestre: "6° Semestre",
+    ramos: [
+      { nombre: "Inferencia Estadística", id: "infer_est", prer: ["estad_prob"] },
+      { nombre: "Gestión Presupuestaria y Costos", id: "gest_pres", prer: ["anal_fin"] },
+      { nombre: "Pensamiento Sistémico", id: "pens_sist", prer: ["princ_data"] },
+      { nombre: "Sistemas de Información y Administración de Datos", id: "sis_inf", prer: ["princ_data", "pens_sist"] },
+      { nombre: "Alfabetización Académica para Ingeniería 2", id: "alf_acad_2", prer: ["alf_acad_1"] },
+      { nombre: "Macroeconomía y Microeconomía", id: "macro_micro", prer: ["top_form", "adm_emp"] },
+      { nombre: "Idioma 4", id: "idioma4", prer: ["idioma3"] }
+    ]
+  },
+  {
+    semestre: "7° Semestre",
+    ramos: [
+      { nombre: "Procesos Industriales", id: "proc_ind", prer: ["termo"] },
+      { nombre: "Gestión de Talento en las Organizaciones", id: "gest_talento", prer: ["adm_emp", "pens_sist"] },
+      { nombre: "Modelamiento", id: "modelamiento", prer: ["infer_est", "algebra_lin"] },
+      { nombre: "Visualización de Datos e Inteligencia de Negocios", id: "vis_dat", prer: ["sis_inf"] },
+      { nombre: "Economía Circular y Sostenibilidad", id: "eco_circ", prer: ["anal_mat", "macro_micro"] },
+      { nombre: "Gestión de la Innovación y el Emprendimiento", id: "gest_emi", prer: ["ingen_emi", "top_form"] },
+      { nombre: "Proyecto de Licenciatura", id: "proy_lic", prer: ["proc_ind", "gest_talento", "modelamiento", "vis_dat", "eco_circ", "gest_emi"] },
+      { nombre: "Simulación de Procesos y Sistemas", id: "sim_proc", prer: ["proc_ind", "modelamiento"] },
+      { nombre: "Investigación de Operaciones", id: "inv_op", prer: ["modelamiento"] }
+    ]
+  },
+  {
+    semestre: "8° Semestre",
+    ramos: [
+      { nombre: "Gestión de Operaciones 1", id: "gest_op1", prer: ["modelamiento"] },
+      { nombre: "Análisis y Estrategia de Negocios", id: "anal_estrat", prer: ["gest_pres", "macro_micro"] },
+      { nombre: "Visualización de Datos e Inteligencia de Negocios", id: "vis_dat2", prer: ["sis_inf"] },
+      { nombre: "Ingeniería Económica", id: "ing_econ", prer: ["gest_pres"] },
+      { nombre: "Proyecto de Licenciatura", id: "proy_lic2", prer: ["proy_lic"] },
+      { nombre: "Electivo Profesional 1", id: "electivo1", prer: ["proy_lic"] },
+      { nombre: "Electivo Profesional 2", id: "electivo2", prer: ["proy_lic"] },
+      { nombre: "Taller de Comunicación Efectiva", id: "taller_com", prer: ["proy_lic"] },
+      { nombre: "Simulación de Procesos y Sistemas", id: "sim_proc2", prer: ["proc_ind"] },
+      { nombre: "Investigación de Operaciones", id: "inv_op2", prer: ["modelamiento"] }
+    ]
+  },
+  {
+    semestre: "9° Semestre",
+    ramos: [
+      { nombre: "Gestión de Operaciones 2", id: "gest_op2", prer: ["gest_op1"] },
+      { nombre: "Gestión de la Cadena de Suministros", id: "gest_cadena", prer: ["gest_op2"] },
+      { nombre: "Dirección Estratégica", id: "dir_estrat", prer: ["anal_estrat"] },
+      { nombre: "Formulación y Evaluación de Proyectos", id: "form_eval", prer: ["eco_circ"] },
+      { nombre: "Simulación de Procesos y Sistemas", id: "sim_proc3", prer: ["sim_proc2"] },
+      { nombre: "Desarrollo Organizacional", id: "des_org", prer: ["gest_talento"] },
+      { nombre: "Gestión Energética", id: "gest_ener", prer: ["eco_circ"] }
+    ]
+  },
+  {
+    semestre: "10° Semestre",
+    ramos: [
+      { nombre: "Estrategia de Marketing", id: "estr_mark", prer: ["gest_emi"] },
+      { nombre: "Gestión de Riesgos", id: "gest_ries", prer: ["gest_ener"] },
+      { nombre: "Gestión de la Cadena de Suministros", id: "gest_cadena2", prer: ["gest_cadena"] },
+      { nombre: "Project Management", id: "proj_man", prer: ["dir_estrat", "form_eval"] },
+      { nombre: "Electivo Profesional 1", id: "electivo1_2", prer: ["electivo1"] },
+      { nombre: "Finanzas", id: "fin
