@@ -1,1 +1,64 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #fdfdfd;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #880E4F;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.semester {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.semester-label {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.course {
+  padding: 8px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.course.passed {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+  border-color: #b71c1c;
+  cursor: default;
+}
+
+.course.unlocked {
+  background-color: #bbdefb;
+  color: #0d47a1;
+  cursor: pointer;
+}
+
+.course.locked {
+  background-color: #eeeeee;
+  color: #616161;
+  cursor: not-allowed;
+}
 
