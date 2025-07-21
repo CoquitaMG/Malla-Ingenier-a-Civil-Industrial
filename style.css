@@ -1,64 +1,70 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: sans-serif;
+  background-color: #f5f5f5;
   margin: 0;
   padding: 20px;
-  background: #fdfdfd;
-  color: #333;
 }
 
 h1 {
   text-align: center;
-  color: #880E4F;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(11, 1fr);
-  gap: 10px;
-  margin-top: 20px;
+#semestres-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 30px;
 }
 
-.semester {
+.semestre {
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  min-width: 160px;
 }
 
-.semester-label {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #555;
+.semestre h2 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
 }
 
-.course {
-  padding: 8px;
+.ramo {
+  width: 140px;
+  background-color: #ffffff;
+  border: 2px solid #888;
   border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
   text-align: center;
-  font-size: 0.9rem;
-  border: 1px solid #ccc;
   cursor: pointer;
-  user-select: none;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+  transition: background-color 0.3s;
 }
 
-.course.passed {
-  background-color: #ffcdd2;
-  color: #b71c1c;
-  border-color: #b71c1c;
-  cursor: default;
+.ramo.aprobado {
+  background-color: #f8d7da; /* rojo claro */
+  border-color: #d9534f;
 }
 
-.course.unlocked {
-  background-color: #bbdefb;
-  color: #0d47a1;
-  cursor: pointer;
+.ramo.abierto {
+  background-color: #cce5ff; /* azul */
+  border-color: #337ab7;
 }
 
-.course.locked {
-  background-color: #eeeeee;
-  color: #616161;
+.ramo.bloqueado {
+  background-color: #e2e3e5; /* gris */
+  border-color: #adb5bd;
   cursor: not-allowed;
+}
+
+.linea {
+  position: absolute;
+  width: 2px;
+  background-color: #000;
+  z-index: 0;
 }
 
